@@ -5,7 +5,7 @@ use MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest;
 use MaxBeckers\AmazonAlexa\RequestHandler\AbstractRequestHandler;
 use MaxBeckers\AmazonAlexa\Response\Response;
 /**
- * Handles classy and clever insults alexa intent requests
+ * Handles Classy Clever Insults intent requests
  *
  * @author Romain Giovanetti <rgiovanetti@outlook.com>
  */
@@ -26,6 +26,11 @@ class ClassyCleverInsultsIntentRequestHandler extends AbstractRequestHandler
     {
         $this->responseHelper          = $responseHelper;
         $this->supportedApplicationIds = ['amzn1.ask.skill.6e748299-5ea1-4924-890a-e98ee4c19cae'];
+        $this->initClassyCleverInsults();
+        
+    }
+    private function initClassyCleverInsults(): void
+    {
         $this->classyCleverInsults = array();
         array_push($this->classyCleverInsults, "I do desire we may be better strangers.");
         array_push($this->classyCleverInsults, "You consistently meet my expectations.");
@@ -48,14 +53,14 @@ class ClassyCleverInsultsIntentRequestHandler extends AbstractRequestHandler
         array_push($this->classyCleverInsults, "You are aware that people simply tolerate you?");
         array_push($this->classyCleverInsults, "I can explain it to you but I can't understand it for you.");
         array_push($this->classyCleverInsults, "As an outsider, what's your perspective on intelligence?");
-    }
+    }   
     /**
      * {@inheritdoc}
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->request instanceOf MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest &&
-        'ask_classy_and_clever_insult' === $request->request->intent->name;
+        $isSupported = $request->request instanceOf MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest || $request->request instanceOf MaxBeckers\AmazonAlexa\Request\Request\Standard\LaunchRequest;
+        return $isSupported;
     }
     /**
      * {@inheritdoc}
@@ -63,6 +68,6 @@ class ClassyCleverInsultsIntentRequestHandler extends AbstractRequestHandler
     public function handleRequest(Request $request): Response
     {
         $classyCleverInsult = $this->classyCleverInsults[array_rand($this->classyCleverInsults)];
-        return $this->responseHelper->respond($classyCleverInsult);
+        return $this->responseHelper->respond($classyCleverInsult, true);
     }
 }
